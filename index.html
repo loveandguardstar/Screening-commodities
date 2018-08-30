@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="layout.css" rel="stylesheet" type="text/css"/>
+    <script src="vue.min.js"></script>
+</head>
+<body>
+<div id="wrap">
+    <section id="section">
+        <nav id="choose">
+            你的选择:
+            <mark v-for="item in choose">
+                {{item}}<a href="javascript:;">x</a>
+            </mark>
+        </nav>
+        <ul id="type">
+            <li v-for="item,index in dataList">
+                {{item.title}}：
+                <a href="javascript:;"
+                   v-for="option,i in item.list"
+                   :class="{active: item.index ===i }"
+                   @click="addChooseHandle(option,i,index)">
+                   {{option}}</a>
+
+            </li>
+        </ul>
+    </section>
+</div>
+    <script>
+        var  data = [
+            {
+                title: '品牌',
+                list: ["苹果", "小米", "锤子", "魅族", "华为", "三星", "OPPO", "vivo", "乐视", "360", "中兴", "索尼"]
+            },
+            {
+                title: '尺寸',
+                list: ["3.0英寸以下", "3.0-3.9英寸", "4.0-4.5英寸", "4.6-4.9英寸", "5.0-5.5英寸", "6.0英寸以上"]
+            },
+            {
+                title: '系统',
+                list: ["安卓", "(", "Android", ")", "苹果", "(", "IOS", ")", "微软", "(", "WindowsPhone", ")", "无", "其他"]
+            },
+            {
+                title: '网络',
+                list: ["联通3G", "双卡单4G", "双卡双4G", "联通4G", "电信4G", "移动4G"]
+            }
+        ];
+
+        data.forEach(function(item){item.index = -1});
+        var vm = new Vue({
+            el: "#wrap",
+            data:{
+                dataList: data,
+                choose: {}
+            },
+            methods:{
+                addChooseHandle:function(option,i,index){
+                    console.log(option);
+                    //这样给对象添加属性不会响应
+                    //this.choose[index] = option;
+                    this.$set(this.choose,index,option);
+                    //找到操作的一行，把这一行中的index设置为点击标签的下标
+                    this.dataList[index].index = i;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
